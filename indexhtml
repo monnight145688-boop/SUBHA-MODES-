@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SUBHA MODS – AI Wingo 30s Signals & Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #06080e;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --neon-green: #10b981;
+            --neon-green-glow: rgba(16, 185, 129, 0.30);
+            --neon-cyan: #06b6d4;
+            --neon-purple: #8b5cf6;
+            --neon-amber: #f59e0b;
+            --neon-red: #ef4444;
+            --text-primary: #ffffff;
+            --text-sub: #94a3b8;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-deep);
+            background-image:
+                radial-gradient(circle at 5% 10%, rgba(16, 185, 129, 0.07) 0%, transparent 35%),
+                radial-gradient(circle at 95% 20%, rgba(6, 182, 212, 0.05) 0%, transparent 35%),
+                radial-gradient(circle at 50% 85%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 20px;
+        }
+
+        @keyframes shimmerPulse {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes loadingGlow {
+            0% { background-color: rgba(255,255,255,0.02); }
+            50% { background-color: rgba(16, 185, 129, 0.08); }
+            100% { background-color: rgba(255,255,255,0.02); }
+        }
+
+        /* ---------- NAVBAR ---------- */
+        .navbar {
+            background: rgba(6, 8, 14, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-purple));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerPulse 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-logo i {
+            -webkit-text-fill-color: initial;
+            color: var(--neon-green);
+            filter: drop-shadow(0 0 12px var(--neon-green-glow));
+        }
+        .nav-logo small {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            -webkit-text-fill-color: var(--text-sub);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-join-nav {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 20px rgba(2, 132, 199, 0.30);
+            transition: transform 0.15s;
+        }
+        .btn-join-nav:active { transform: scale(0.95); }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 580px;
+            margin: 0 auto;
+            padding: 0 16px 20px;
+        }
+
+        /* ---------- SCREENSHOT CARDS ---------- */
+        .screenshot-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 12px 0;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        
+        .loading-shimmer {
+            animation: loadingGlow 1.5s infinite ease-in-out;
+        }
+
+        .screenshot-card img, .feedback-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            min-height: 140px;
+            background: rgba(255,255,255,0.02);
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.4s;
+            opacity: 0.95;
+        }
+        .screenshot-card img:hover, .feedback-card img:hover {
+            transform: scale(1.02);
+            opacity: 1;
+        }
+        .screenshot-card .caption {
+            padding: 10px 14px;
+            font-size: 11px;
+            color: var(--text-sub);
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* ---------- FEEDBACK GALLERY GRID ---------- */
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .feedback-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .feedback-caption {
+            padding: 6px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* ---------- HERO ---------- */
+        .hero { padding: 10px 0; text-align: center; }
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 18px;
+            margin: 10px 0 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .hero-features span { display: flex; align-items: center; gap: 5px; }
+        .hero-features .green { color: var(--neon-green); }
+        .hero-features .cyan { color: var(--neon-cyan); }
+        .hero-features .purple { color: var(--neon-purple); }
+
+        .hero-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .hero-desc strong { color: var(--neon-green); }
+
+        /* ---------- BUTTONS ---------- */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 380px;
+            margin: 0 auto 10px;
+        }
+        .btn-get-started {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-purple));
+            color: #022c22;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 36px var(--neon-green-glow);
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .btn-get-started:active { transform: scale(0.96); }
+
+        .btn-telegram {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 28px rgba(2, 132, 199, 0.30);
+        }
+
+        .btn-scroll {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-sub);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* ---------- SECTIONS ---------- */
+        .section {
+            padding: 20px 0 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .section-pill {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            color: var(--neon-green);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 14px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+        .sec-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #fff 60%, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sec-desc {
+            font-size: 12px;
+            color: var(--text-sub);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        /* ---------- STEP & SIGNAL CARDS ---------- */
+        .step-item, .sig-item, .price-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .step-badge {
+            position: absolute;
+            top: 14px; right: 14px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            color: #000;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            font-weight: 900;
+            font-size: 12px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 20px var(--neon-green-glow);
+        }
+        .step-title, .sig-title { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .step-desc, .sig-desc { font-size: 12px; color: var(--text-sub); margin-top: 4px; }
+        
+        .tag-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .tag-item {
+            background: rgba(16, 185, 129, 0.07);
+            color: var(--neon-green);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.06);
+        }
+        .sig-badge {
+            font-size: 9px;
+            padding: 2px 12px;
+            border-radius: 8px;
+            background: rgba(6, 182, 212, 0.06);
+            color: var(--neon-cyan);
+            font-weight: 700;
+            margin-left: auto;
+            text-transform: uppercase;
+            border: 1px solid rgba(6, 182, 212, 0.05);
+        }
+
+        /* ---------- TIMELINE ---------- */
+        .timeline {
+            position: relative;
+            padding-left: 22px;
+            margin-top: 6px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px; top: 6px; bottom: 6px;
+            width: 2.5px;
+            background: linear-gradient(180deg, var(--neon-green), var(--neon-cyan), var(--neon-purple));
+            border-radius: 4px;
+        }
+        .tl-node { position: relative; margin-bottom: 14px; }
+        .tl-node::before {
+            content: '';
+            position: absolute;
+            left: -20px; top: 5px;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            box-shadow: 0 0 24px var(--neon-green-glow);
+            border: 2px solid rgba(0, 0, 0, 0.4);
+        }
+        .tl-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 12px 16px;
+        }
+        .tl-card b { font-size: 14px; }
+        .tl-card p { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+
+        /* ---------- PRICING ---------- */
+        .price-head { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .price-tag { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 900; color: var(--neon-green); margin: 4px 0 2px; }
+        .price-tag small { font-size: 13px; font-weight: 600; color: var(--text-sub); }
+        .price-desc { font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
+        .price-features { font-size: 11px; color: var(--text-sub); list-style: none; margin-bottom: 10px; display: flex; flex-direction: column; gap: 4px; }
+        .price-features li i { color: var(--neon-green); margin-right: 6px; }
+        .price-item.featured {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 40px var(--neon-green-glow);
+        }
+
+        /* ---------- GRID ---------- */
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 12px 10px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .grid-item b { display: block; font-size: 13px; }
+        .grid-item span { font-size: 10px; color: var(--text-sub); }
+
+        /* ---------- FAQ ---------- */
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .faq-q {
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-a {
+            padding: 0 16px 14px 16px;
+            font-size: 12px;
+            color: var(--text-sub);
+            display: none;
+            line-height: 1.7;
+        }
+
+        /* ---------- THANK YOU ---------- */
+        .thankyou { text-align: center; padding: 20px 0 10px; border-top: 1px solid var(--border-subtle); margin-top: 10px; }
+        .thankyou h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .thankyou p { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+        .thankyou .badge { margin-top: 8px; font-size: 12px; color: var(--neon-green); }
+        .thankyou .team { font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+
+        /* ---------- LIGHTBOX MODAL ---------- */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox-img {
+            max-width: 95%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 0 35px rgba(16, 185, 129, 0.4);
+            border: 1px solid var(--border-subtle);
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 20px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+        footer a { color: var(--text-sub); text-decoration: none; margin: 0 6px; }
+        
+        @media (max-width: 480px) {
+            .container { padding: 0 12px 16px; }
+            .sec-title { font-size: 19px; }
+            .feedback-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== NAVBAR ====== -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-shapes"></i> SUBHA MODS
+            <small>wingo30.com</small>
+        </div>
+        <a href="https://t.me/+xY09jGOd6LIxNDI1" target="_blank" class="btn-join-nav">
+            <i class="fa-brands fa-telegram"></i> Join
+        </a>
+    </nav>
+
+    <!-- ====== MAIN CONTAINER ====== -->
+    <div class="container">
+
+        <!-- ============================================================ -->
+        <!-- ====== 1ST TOP SCREENSHOT PHOTO ====== -->
+        <!-- ============================================================ -->
+        <div class="screenshot-card loading-shimmer">
+            <img 
+                src="https://ibb.co/Kj1Bt86W" 
+                alt="SUBHA MODS Dashboard Live" 
+                loading="lazy"
+            />
+            <div class="caption">
+                <i class="fa-solid fa-chart-line"></i> SUBHA MODS • SG TRADER Dashboard • AI Analytics Active • Live Signals
+            </div>
+        </div>
+
+        <!-- ====== HERO ====== -->
+        <section class="hero">
+            <div class="hero-features">
+                <span class="green"><i class="fa-solid fa-circle-check"></i> ACCURATE SIGNALS</span>
+                <span class="cyan"><i class="fa-solid fa-chart-line"></i> DATA DRIVEN ANALYSIS</span>
+                <span class="purple"><i class="fa-solid fa-shield-halved"></i> RISK MANAGEMENT</span>
+            </div>
+
+            <p class="hero-desc">
+                Get live Wingo signal updates and <strong>SUBHA MODS AI</strong> prediction insights for <strong>BIG/SMALL</strong> and color games. Track rounds, compare patterns, and use the Wingo tools for free.
+            </p>
+
+            <div class="btn-group">
+                <!-- 🔴 লিংকটি login.html-এ করা হয়েছে (প্রথমে লগইন পেজ খুলবে) 🔴 -->
+                <a href="login.html" class="btn-get-started">
+                    <i class="fa-solid fa-crosshairs"></i> Get Started <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="https://t.me/+xY09jGOd6LIxNDI1" target="_blank" class="btn-telegram">
+                    <i class="fa-brands fa-telegram fa-lg"></i> Join Telegram
+                </a>
+            </div>
+
+            <div class="btn-scroll">
+                <i class="fa-solid fa-chevron-down"></i> SCROLL FOR MORE
+            </div>
+        </section>
+
+        <!-- ====== AI OVERVIEW SUMMARY ====== -->
+        <section class="section">
+            <span class="section-pill">AI OVERVIEW SUMMARY</span>
+            <h2 class="sec-title">Wingo Signal, Tool &amp; AI Prediction Hub</h2>
+            <p class="sec-desc">
+                <strong>SUBHA MODS</strong> is a Wingo tool hub for checking Wingo signal pages, Wingo 30 second prediction, color prediction, Wingo AI answers, Wingo analyzer pages, and recent BIG SMALL game history.
+            </p>
+
+            <div class="step-item">
+                <div class="step-badge">1</div>
+                <div class="step-title"><i class="fa-regular fa-lightbulb" style="color: var(--neon-green);"></i> What It Does</div>
+                <div class="step-desc">Shows Wingo prediction tools, color prediction pages, AI bot guidance, Smart AI checks, and settled game history in one place.</div>
+                <div class="tag-row">
+                    <span class="tag-item">SMART</span>
+                    <span class="tag-item">FAST</span>
+                    <span class="tag-item">ACCURATE</span>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-badge">2</div>
+                <div class="step-title"><i class="fa-solid fa-bullseye" style="color: var(--neon-cyan);"></i> Best For</div>
+                <div class="step-desc">Players searching for Wingo signal, Wingo tool, Wingo analyzer, Wingo 30 second prediction, Wingo AI prediction.</div>
+                <div class="tag-row">
+                    <span class="tag-item">SIGNALS</span>
+                    <span class="tag-item">ANALYSIS</span>
+                    <span class="tag-item">PREDICTION</span>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-badge">3</div>
+                <div class="step-title"><i class="fa-solid fa-compass" style="color: var(--neon-purple);"></i> How To Use</div>
+                <div class="step-desc">Start with the 30-second prediction page, compare color prediction trends, then review Wingo bot or history pages for context.</div>
+                <div class="tag-row">
+                    <span class="tag-item">PREDICTION</span>
+                    <span class="tag-item">TRENDS</span>
+                    <span class="tag-item">HISTORY</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== SIGNALS & INDICATORS ====== -->
+        <section class="section">
+            <span class="section-pill">SIGNALS &amp; INDICATORS</span>
+            <h2 class="sec-title">Number, Color &amp; Size Wingo Signals</h2>
+            <p class="sec-desc"><strong>SUBHA MODS</strong> turns Wingo30 history into readable signals: which numbers are hot, which colors are trending, and whether the pattern favors Big or Small.</p>
+
+            <div class="sig-item">
+                <div class="sig-title"><i class="fa-solid fa-hashtag" style="color: var(--neon-green);"></i> Number Signal <span class="sig-badge">Digit 0-9</span></div>
+                <div class="sig-desc">The most relevant digit from the recent pattern, ranked as the primary recommendation for the current period.</div>
+            </div>
+
+            <div class="sig-item">
+                <div class="sig-title"><i class="fa-solid fa-palette" style="color: var(--neon-cyan);"></i> Color Signal <span class="sig-badge">Green / Violet / Red</span></div>
+                <div class="sig-desc">Color estimate derived from the number mapping and the latest color distribution.</div>
+            </div>
+
+            <div class="sig-item">
+                <div class="sig-title"><i class="fa-solid fa-up-right-and-down-left-from-center" style="color: var(--neon-purple);"></i> Size Signal <span class="sig-badge">Big (5-9) / Small (0-4)</span></div>
+                <div class="sig-desc">Size estimate that reflects whether the recent trend favors larger or smaller digits.</div>
+            </div>
+
+            <div class="sig-item">
+                <div class="sig-title"><i class="fa-solid fa-fire" style="color: var(--neon-amber);"></i> Hot Signal <span class="sig-badge" style="color: var(--neon-amber); border-color: rgba(245,158,11,0.10);">Most Frequent</span></div>
+                <div class="sig-desc">The number appearing most often in recent rounds, tracked live on the signal panel.</div>
+            </div>
+
+            <div class="sig-item">
+                <div class="sig-title"><i class="fa-solid fa-snowflake" style="color: var(--neon-cyan);"></i> Cold Signal <span class="sig-badge" style="color: var(--neon-cyan); border-color: rgba(6,182,212,0.08);">Long Quiet</span></div>
+                <div class="sig-desc">Numbers that have stayed quiet and may surface in trend analysis.</div>
+            </div>
+        </section>
+
+        <!-- ====== WINGO 30s CYCLE ====== -->
+        <section class="section">
+            <span class="section-pill">WINGO30 ANALYSIS</span>
+            <h2 class="sec-title">Wingo 30 Second Prediction Cycle</h2>
+            <p class="sec-desc">Every 30 seconds a new Wingo30 period begins. <strong>SUBHA MODS AI</strong> tracks the cycle in real time.</p>
+
+            <div class="timeline">
+                <div class="tl-node">
+                    <div class="tl-card">
+                        <b><i class="fa-solid fa-rotate" style="color: var(--neon-green);"></i> 1. Auto-refresh history</b>
+                        <p>The latest Wingo30 results are pulled from the live game feed continuously, every few seconds.</p>
+                    </div>
+                </div>
+                <div class="tl-node">
+                    <div class="tl-card">
+                        <b><i class="fa-regular fa-bell" style="color: var(--neon-cyan);"></i> 2. Period-aware signals</b>
+                        <p>Predictions always reference the exact current issue number and show a live countdown.</p>
+                    </div>
+                </div>
+                <div class="tl-node">
+                    <div class="tl-card">
+                        <b><i class="fa-regular fa-circle-check" style="color: var(--neon-purple);"></i> 3. Result comparison</b>
+                        <p>Your predictions are matched against settled periods, so win and loss stats are based on real results.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== PREMIUM MODELS ====== -->
+        <section class="section">
+            <span class="section-pill">PREMIUM MODELS</span>
+            <h2 class="sec-title">Korven vs FX1 Prediction Models</h2>
+            <p class="sec-desc">Two lifetime premium profiles with unlimited predictions and full dashboard analytics.</p>
+
+            <div class="price-item">
+                <div class="price-head">
+                    Korven
+                    <span style="font-size: 9px; background: rgba(255,255,255,0.04); padding: 2px 14px; border-radius: 20px; font-weight: 600; color: var(--text-sub); border: 1px solid var(--border-subtle);">ENTRY-LEVEL</span>
+                </div>
+                <div class="price-tag">₮749 <small>lifetime</small></div>
+                <div class="price-desc">Usually fixes the result within 3-4 levels of analysis.</div>
+                <ul class="price-features">
+                    <li><i class="fa-solid fa-check"></i> Lifetime premium access</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited predictions</li>
+                    <li><i class="fa-solid fa-check"></i> Full analytics dashboard</li>
+                </ul>
+                <a href="https://t.me/+xY09jGOd6LIxNDI1" target="_blank" class="btn-telegram" style="background: rgba(255,255,255,0.04); box-shadow: none; border: 1px solid var(--border-subtle);">Activate Korven</a>
+            </div>
+
+            <div class="price-item featured">
+                <div class="price-head" style="color: var(--neon-green);">
+                    FX1
+                    <span style="font-size: 9px; background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan)); color: #000; padding: 2px 14px; border-radius: 20px; font-weight: 700;">FASTER</span>
+                </div>
+                <div class="price-tag">₮1,100 <small>lifetime</small></div>
+                <div class="price-desc">Usually fixes the result within about 2 levels — the quickest profile.</div>
+                <ul class="price-features">
+                    <li><i class="fa-solid fa-check"></i> Lifetime premium access</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited predictions</li>
+                    <li><i class="fa-solid fa-check"></i> Full analytics dashboard</li>
+                </ul>
+                <!-- 🔴 লিংকটি login.html-এ করা হয়েছে (প্রথমে লগইন পেজ খুলবে) 🔴 -->
+                <a href="login.html" class="btn-get-started">
+                    Activate FX1 Turbo
+                </a>
+            </div>
+        </section>
+
+        <!-- ====== PROCESS WORKFLOW ====== -->
+        <section class="section">
+            <span class="section-pill">PROCESS WORKFLOW</span>
+            <h2 class="sec-title">Understanding the Prediction Process</h2>
+            <p class="sec-desc">Our tools are designed to simplify complex mathematical models into an easy-to-read format.</p>
+
+            <div class="step-item">
+                <span class="tag-item" style="float: right; background: rgba(16,185,129,0.10); color: var(--neon-green);">Completed</span>
+                <div class="step-title"><i class="fa-regular fa-pen-to-square" style="color: var(--neon-green);"></i> 1. Input Historical Data</div>
+                <div class="step-desc">Take the final three drawn numbers from your current game log and enter them into the prediction calculator widget.</div>
+            </div>
+
+            <div class="step-item">
+                <span class="tag-item" style="float: right; background: rgba(6,182,212,0.08); color: var(--neon-cyan);">In Progress</span>
+                <div class="step-title"><i class="fa-solid fa-microchip" style="color: var(--neon-cyan);"></i> 2. Algorithmic Processing</div>
+                <div class="step-desc">The software cross-references these digits against thousands of past drawing patterns to identify mathematical correlations.</div>
+            </div>
+
+            <div class="step-item">
+                <span class="tag-item" style="float: right; background: rgba(245,158,11,0.08); color: var(--neon-amber);">Pending</span>
+                <div class="step-title"><i class="fa-regular fa-eye" style="color: var(--neon-amber);"></i> 3. Evaluate the Output</div>
+                <div class="step-desc">Review the suggested BIG or SMALL indicator, noting the confidence percentage provided.</div>
+            </div>
+        </section>
+
+        <!-- ====== MULTI-REGION COVERAGE (COUNTRIES) ====== -->
+        <section class="section">
+            <span class="section-pill">MULTI-REGION COVERAGE</span>
+            <h2 class="sec-title">Available Across South Asia</h2>
+            <p class="sec-desc"><strong>SUBHA MODS</strong> works seamlessly in all major South Asian markets with optimized server response.</p>
+            <div class="grid-2col">
+                <div class="grid-item"><b>🇮🇳 India</b><span>Online &lt;35ms · 99.99%</span></div>
+                <div class="grid-item"><b>🇧🇩 Bangladesh</b><span>Online &lt;42ms · 99.97%</span></div>
+                <div class="grid-item"><b>🇵🇰 Pakistan</b><span>Online &lt;48ms · 99.95%</span></div>
+                <div class="grid-item"><b>🇳🇵 Nepal</b><span>Online &lt;38ms · 99.98%</span></div>
+            </div>
+        </section>
+
+        <!-- ====== MULTI-PLATFORM SUPPORT ====== -->
+        <section class="section">
+            <span class="section-pill">MULTI-PLATFORM SUPPORT</span>
+            <h2 class="sec-title">Available on All Platforms</h2>
+            <p class="sec-desc">Enjoy a seamless experience across all your devices.</p>
+            <div class="grid-2col">
+                <div class="grid-item"><i class="fa-brands fa-android" style="color: var(--neon-green);"></i> <b>Android</b><span>Supported</span></div>
+                <div class="grid-item"><i class="fa-brands fa-apple" style="color: var(--text-sub);"></i> <b>iOS</b><span>Supported</span></div>
+                <div class="grid-item"><i class="fa-brands fa-windows" style="color: var(--neon-cyan);"></i> <b>Windows PC</b><span>Supported</span></div>
+                <div class="grid-item"><i class="fa-solid fa-laptop" style="color: var(--neon-purple);"></i> <b>macOS</b><span>Supported</span></div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- ====== 2ND FEEDBACK & PROOF GALLERY (13 PHOTOS) ====== -->
+        <!-- ============================================================ -->
+        <section class="section">
+            <span class="section-pill">MEMBER FEEDBACK &amp; WIN PROOFS</span>
+            <h2 class="sec-title">Live Predictions &amp; Community Feedbacks</h2>
+            <p class="sec-desc">Real winning screenshots, member feedback, and live AI signal performance proofs. Tap any photo to enlarge.</p>
+
+            <div class="feedback-grid">
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/prBBBBsm" alt="Win Proof 1" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #1</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/LjfzDBP" alt="Win Proof 2" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #2</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/DP4t9bV4" alt="Win Proof 3" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #3</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/FLwptmCj" alt="Win Proof 4" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #4</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/3YYFDZZd" alt="Win Proof 5" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #5</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/k29fRdx3" alt="Win Proof 6" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #6</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/Z6j1tyf4" alt="Win Proof 7" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #7</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/7tbjr575" alt="Win Proof 8" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #8</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/WWqBh59r" alt="Win Proof 9" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #9</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/b5QqYn3x" alt="Win Proof 10" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #10</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/nMcSMTR1" alt="Win Proof 11" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #11</div>
+                </div>
+                <div class="feedback-card loading-shimmer">
+                    <img src="https://ibb.co/H5d4X9f" alt="Win Proof 12" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #12</div>
+                </div>
+                <div class="feedback-card loading-shimmer" style="grid-column: span 2;">
+                    <img src="https://ibb.co/b4m0HBy" alt="Win Proof 13" loading="lazy" />
+                    <div class="feedback-caption"><i class="fa-solid fa-circle-check"></i> Win Proof #13</div>
+                </div>
+            </div>
+
+            <!-- Withdrawal history mockup -->
+            <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px 14px; margin-top: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 700; font-size: 13px; background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SUBHA MODS</span>
+                    <span style="font-size: 10px; color: var(--text-sub);"><i class="fa-regular fa-clock"></i> Withdrawal history</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-top: 4px;">
+                    <span>Balance: ₮40.00</span>
+                    <span>Type: USDT</span>
+                </div>
+                <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">2023-06-22 10:25:23 · WIDC2533911985696</div>
+            </div>
+        </section>
+
+        <!-- ====== ABOUT / WHAT SUBHA MODS AI DOES ====== -->
+        <section class="section">
+            <span class="section-pill">ABOUT</span>
+            <h2 class="sec-title">What SUBHA MODS AI Does</h2>
+            <p class="sec-desc"><strong>SUBHA MODS AI</strong> is an AI-powered prediction and signals platform built for the Wingo 30-second game. It analyzes live game history to produce number, color, and size signals for every new period.</p>
+
+            <div style="display: grid; gap: 10px; margin-top: 4px;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;">
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--neon-green);">01</span>
+                    <div><b style="font-size: 14px;"><i class="fa-regular fa-clock" style="color: var(--neon-green);"></i> Live Prediction Tool</b><p style="font-size: 11px; color: var(--text-sub);">Generate a signal for the current period with a single tap using real-time Wingo30 analysis.</p></div>
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;">
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--neon-cyan);">02</span>
+                    <div><b style="font-size: 14px;"><i class="fa-solid fa-fire" style="color: var(--neon-amber);"></i> Trend &amp; Hot-Cold</b><p style="font-size: 11px; color: var(--text-sub);">See which numbers repeat most and which are due, tracked live on the signal panel.</p></div>
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;">
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--neon-purple);">03</span>
+                    <div><b style="font-size: 14px;"><i class="fa-regular fa-chart-bar" style="color: var(--neon-purple);"></i> Analytics Dashboard</b><p style="font-size: 11px; color: var(--text-sub);">Win rate, prediction history, and frequency board computed from real settled results.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== FAQ ====== -->
+        <section class="section">
+            <span class="section-pill">HELP &amp; SUPPORT</span>
+            <h2 class="sec-title">Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    What is SUBHA MODS AI? <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-a"><strong>SUBHA MODS AI</strong> is an advanced prediction and signals platform built for the Wingo 30-second game.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    How does the prediction tool work? <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">It analyzes live game history to produce number, color, and size signals for every new period using pattern trend models.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Difference between Korven and FX1? <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-a">Korven fixes result within 3-4 levels, while FX1 is faster and fixes result within 1-2 levels.</div>
+            </div>
+        </section>
+
+        <!-- ====== THANK YOU EVERYONE ====== -->
+        <div class="thankyou">
+            <h2>THANK YOU EVERYONE</h2>
+            <p>Thank you for choosing <strong>SUBHA MODS AI</strong> — your trusted Wingo signal &amp; prediction companion.</p>
+            <div class="badge"><i class="fa-solid fa-circle-check"></i> Verified Platform</div>
+            <div class="team">With ❤️ — The SUBHA MODS Team</div>
+        </div>
+
+    </div>
+
+    <!-- ====== LIGHTBOX POPUP MODAL ====== -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-close">&times;</div>
+        <img src="" id="lightbox-img" class="lightbox-img" alt="Enlarged Proof" />
+    </div>
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <p>© 2026 <strong>SUBHA MODS</strong>. All rights reserved.</p>
+        <p style="margin-top: 4px;">
+            <a href="#">Privacy Policy</a> | <a href="#">Terms &amp; Conditions</a> | <a href="#">Refund Policy</a>
+        </p>
+    </footer>
+
+    <!-- ====== AUTOMATIC IMGBB DIRECT LINK RESOLVER ====== -->
+    <script>
+        async function resolveImgBbPage(pageUrl) {
+            if (!pageUrl || !pageUrl.includes('ibb.co/') || pageUrl.includes('i.ibb.co/')) {
+                return pageUrl;
+            }
+            
+            const proxies = [
+                url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+            ];
+
+            for (const getProxy of proxies) {
+                try {
+                    const proxyUrl = getProxy(pageUrl);
+                    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(3500) });
+                    if (res.ok) {
+                        const htmlText = await res.text();
+                        const match = htmlText.match(/meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
+                                      htmlText.match(/meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i) ||
+                                      htmlText.match(/<img[^>]+src=["'](https:\/\/i\.ibb\.co\/[^"']+)["']/i);
+                        if (match && match[1]) {
+                            return match[1];
+                        }
+                    }
+                } catch (e) {
+                    // Try next proxy fallback
+                }
+            }
+            return pageUrl;
+        }
+
+        async function fixAllImages() {
+            const images = document.querySelectorAll('img');
+            images.forEach(async (img) => {
+                const src = img.getAttribute('src');
+                const card = img.closest('.screenshot-card, .feedback-card');
+                
+                if (src && src.includes('ibb.co/') && !src.includes('i.ibb.co/')) {
+                    const directUrl = await resolveImgBbPage(src);
+                    if (directUrl && directUrl !== src) {
+                        img.src = directUrl;
+                    }
+                }
+
+                img.onload = () => {
+                    if (card) card.classList.remove('loading-shimmer');
+                };
+                img.onerror = () => {
+                    if (card) card.classList.remove('loading-shimmer');
+                };
+
+                if (img.complete && img.naturalWidth !== 0) {
+                    if (card) card.classList.remove('loading-shimmer');
+                }
+            });
+        }
+
+        // Lightbox Popup Modal
+        function initLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            document.querySelectorAll('.screenshot-card img, .feedback-card img').forEach(img => {
+                img.addEventListener('click', () => {
+                    if (img.src) {
+                        lightboxImg.src = img.src;
+                        lightbox.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function toggleFaq(el) {
+            const ans = el.nextElementSibling;
+            const icon = el.querySelector('.fa-chevron-down');
+            if (ans.style.display === 'block') {
+                ans.style.display = 'none';
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            } else {
+                ans.style.display = 'block';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fixAllImages();
+            initLightbox();
+        });
+    </script>
+
+</body>
+</html>

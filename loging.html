@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>লগইন – SUBHA MODS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-box {
+            max-width: 400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .login-box h1 { font-size: 26px; font-weight: 800; color: #0b1e33; }
+        .login-box p { color: #64748b; font-size: 14px; margin: 8px 0 24px; }
+        .login-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .login-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-login:hover { background: #059669; }
+        .login-error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        .login-toggle {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .login-toggle a {
+            color: #10b981;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-home {
+            display: inline-block;
+            margin-top: 16px;
+            color: #94a3b8;
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .back-home:hover { color: #0b1e33; }
+        .toast {
+            position: fixed; bottom: 30px; right: 30px;
+            background: #0b1e33; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transform: translateY(80px); opacity: 0;
+            transition: 0.3s ease; z-index: 999;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h1>🔐 SUBHA MODS</h1>
+    <p>লগইন করুন আপনার অ্যাক্সেস চেক করতে</p>
+    
+    <input type="email" id="loginEmail" class="login-input" placeholder="ইমেইল লিখুন" value="admin@subhamods.com" />
+    <input type="password" id="loginPassword" class="login-input" placeholder="পাসওয়ার্ড লিখুন" value="admin123" />
+    <button class="btn-login" id="loginBtn">লগইন করুন</button>
+    <div class="login-error" id="loginError"></div>
+    
+    <div class="login-toggle">
+        নতুন ব্যবহারকারী? <a id="toggleAuthLink">অ্যাকাউন্ট তৈরি করুন</a>
+    </div>
+    <a href="index.html" class="back-home"><i class="fa-solid fa-arrow-left"></i> হোমপেজে ফিরে যান</a>
+    <div style="margin-top:12px; font-size:11px; color:#94a3b8;">
+        ⚡ অ্যাডমিন: admin@subhamods.com / admin123
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    // ===== কনফিগারেশন (অ্যাডমিন ইমেইল ও পাস) =====
+    const ADMIN_EMAIL = 'admin@subhamods.com';
+    const ADMIN_PASS = 'admin123';
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    function getUsers() {
+        const data = localStorage.getItem('subha_users');
+        return data ? JSON.parse(data) : [];
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('subha_users', JSON.stringify(users));
+    }
+
+    function setCurrentUser(user) {
+        localStorage.setItem('subha_current_user', JSON.stringify(user));
+    }
+
+    function getDaysRemaining(startDate, accessDays) {
+        if (!startDate || accessDays === 0) return 0;
+        const now = new Date();
+        const end = new Date(startDate);
+        end.setDate(end.getDate() + accessDays);
+        const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+        return diff > 0 ? diff : 0;
+    }
+
+    function handleLogin(email, password) {
+        const users = getUsers();
+        let user = users.find(u => u.email === email);
+        let isNew = false;
+
+        // নতুন ইউজার?
+        if (!user) {
+            if (password.length < 4) {
+                document.getElementById('loginError').textContent = 'পাসওয়ার্ড কমপক্ষে ৪ অক্ষর হতে হবে।';
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+            user = { email, password, accessDays: 0, startDate: null };
+            users.push(user);
+            saveUsers(users);
+            isNew = true;
+            showToast('অ্যাকাউন্ট তৈরি হয়েছে!');
+        } else {
+            if (user.password !== password) {
+                document.getElementById('loginError').textContent = 'ভুল পাসওয়ার্ড!';
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+        }
+
+        document.getElementById('loginError').style.display = 'none';
+        setCurrentUser(user);
+
+        // ===== রিডাইরেক্ট লজিক =====
+        // ১. অ্যাডমিন চেক
+        if (email === ADMIN_EMAIL) {
+            showToast('স্বাগতম অ্যাডমিন!');
+            window.location.href = 'admin.html';
+            return;
+        }
+
+        // ২. সাধারণ ইউজার – অ্যাক্সেস চেক
+        const daysLeft = getDaysRemaining(user.startDate, user.accessDays);
+        if (user.accessDays > 0 && daysLeft > 0) {
+            showToast(`স্বাগতম! ${daysLeft} দিন অ্যাক্সেস বাকি।`);
+            window.location.href = 'prediction.html';
+        } else {
+            // অ্যাক্সেস নেই
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('loginError').textContent = '❌ আপনার অ্যাক্সেস নেই বা মেয়াদ শেষ। অ্যাডমিনের সাথে যোগাযোগ করুন।';
+            showToast('অ্যাক্সেস নেই!');
+        }
+    }
+
+    // ===== ইভেন্ট লিসেনার =====
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value.trim();
+        if (!email || !pass) {
+            document.getElementById('loginError').textContent = 'ইমেইল ও পাসওয়ার্ড দিন।';
+            document.getElementById('loginError').style.display = 'block';
+            return;
+        }
+        handleLogin(email, pass);
+    });
+
+    // টগল (সাইন আপ / লগইন)
+    let isSignUp = false;
+    document.getElementById('toggleAuthLink').addEventListener('click', function() {
+        isSignUp = !isSignUp;
+        document.getElementById('loginBtn').textContent = isSignUp ? 'অ্যাকাউন্ট তৈরি করুন' : 'লগইন করুন';
+        this.textContent = isSignUp ? 'ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন' : 'নতুন ব্যবহারকারী? অ্যাকাউন্ট তৈরি করুন';
+        document.getElementById('loginError').style.display = 'none';
+    });
+
+    // Enter key support
+    document.getElementById('loginPassword').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+    document.getElementById('loginEmail').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+</script>
+</body>
+</html>

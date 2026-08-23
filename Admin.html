@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>অ্যাডমিন প্যানেল – SUBHA MODS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.07);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e9edf2;
+        }
+        .header h2 { font-size: 20px; font-weight: 800; color: #0b1e33; }
+        .header h2 i { color: #10b981; }
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-logout { background: #fee2e2; color: #b91c1c; }
+        .btn-home { background: #e9edf2; color: #1e293b; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin: 22px 0;
+        }
+        .stat-card {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+        }
+        .stat-card .num { font-size: 26px; font-weight: 800; color: #0b1e33; }
+        .stat-card .label { font-size: 13px; color: #64748b; }
+
+        .admin-section { margin-top: 20px; }
+        .admin-section h3 { font-size: 17px; font-weight: 700; color: #0b1e33; margin-bottom: 14px; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { background: #f1f5f9; padding: 12px 14px; text-align: left; font-weight: 600; color: #1e293b; }
+        td { padding: 12px 14px; border-bottom: 1px solid #e9edf2; vertical-align: middle; }
+        .access-select {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .btn-save {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-save:hover { background: #059669; }
+        .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge.active { background: #dcfce7; color: #15803d; }
+        .badge.expired { background: #fee2e2; color: #b91c1c; }
+        .badge.pending { background: #fef9c3; color: #a16207; }
+        .no-users { text-align: center; color: #94a3b8; padding: 20px 0; }
+        .toast {
+            position: fixed; bottom: 30px; right: 30px;
+            background: #0b1e33; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transform: translateY(80px); opacity: 0;
+            transition: 0.3s ease; z-index: 999;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            th, td { font-size: 12px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2><i class="fa-solid fa-user-gear"></i> অ্যাডমিন প্যানেল</h2>
+        <div class="btn-group">
+            <a href="index.html" class="btn btn-home"><i class="fa-solid fa-house"></i> হোম</a>
+            <button class="btn btn-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</button>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="num" id="totalUsers">0</div><div class="label">মোট ব্যবহারকারী</div></div>
+        <div class="stat-card"><div class="num" id="activeUsers">0</div><div class="label">সক্রিয়</div></div>
+        <div class="stat-card"><div class="num" id="expiredUsers">0</div><div class="label">মেয়াদোত্তীর্ণ</div></div>
+    </div>
+
+    <div class="admin-section">
+        <h3><i class="fa-solid fa-pen-to-square"></i> ব্যবহারকারী অ্যাক্সেস পরিবর্তন করুন</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>ইমেইল</th><th>অ্যাক্সেস দিন</th><th>অবস্থা</th><th>অ্যাকশন</th></tr></thead>
+                <tbody id="userTableBody"><tr><td colspan="4" class="no-users">লোড হচ্ছে...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    const ADMIN_EMAIL = 'admin@subhamods.com';
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    function getUsers() {
+        const data = localStorage.getItem('subha_users');
+        return data ? JSON.parse(data) : [];
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('subha_users', JSON.stringify(users));
+    }
+
+    function getCurrentUser() {
+        const data = localStorage.getItem('subha_current_user');
+        return data ? JSON.parse(data) : null;
+    }
+
+    function clearCurrentUser() {
+        localStorage.removeItem('subha_current_user');
+    }
+
+    function getDaysRemaining(startDate, accessDays) {
+        if (!startDate || accessDays === 0) return 0;
+        const now = new Date();
+        const end = new Date(startDate);
+        end.setDate(end.getDate() + accessDays);
+        const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+        return diff > 0 ? diff : 0;
+    }
+
+    function getStatus(startDate, accessDays) {
+        if (!startDate || accessDays === 0) return { label: 'অপেক্ষমান', cls: 'pending' };
+        const daysLeft = getDaysRemaining(startDate, accessDays);
+        if (daysLeft <= 0) return { label: 'মেয়াদ শেষ', cls: 'expired' };
+        return { label: 'সক্রিয়', cls: 'active' };
+    }
+
+    function renderAdmin() {
+        const current = getCurrentUser();
+        if (!current || current.email !== ADMIN_EMAIL) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const users = getUsers();
+        let active = 0, expired = 0;
+        users.forEach(u => {
+            const st = getStatus(u.startDate, u.accessDays);
+            if (st.cls === 'active') active++;
+            else if (st.cls === 'expired') expired++;
+        });
+        document.getElementById('totalUsers').textContent = users.length;
+        document.getElementById('activeUsers').textContent = active;
+        document.getElementById('expiredUsers').textContent = expired;
+
+        const tbody = document.getElementById('userTableBody');
+        if (!users || users.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="no-users">কোনো ব্যবহারকারী নেই</td></tr>`;
+            return;
+        }
+
+        let html = '';
+        users.forEach((u, idx) => {
+            const st = getStatus(u.startDate, u.accessDays);
+            const daysLeft = getDaysRemaining(u.startDate, u.accessDays);
+            html += `
+                <tr>
+                    <td><strong>${u.email}</strong></td>
+                    <td>
+                        <select class="access-select" data-index="${idx}">
+                            <option value="10" ${u.accessDays === 10 ? 'selected' : ''}>১০ দিন</option>
+                            <option value="15" ${u.accessDays === 15 ? 'selected' : ''}>১৫ দিন</option>
+                            <option value="30" ${u.accessDays === 30 ? 'selected' : ''}>৩০ দিন</option>
+                            <option value="90" ${u.accessDays === 90 ? 'selected' : ''}>৩ মাস</option>
+                            <option value="365" ${u.accessDays === 365 ? 'selected' : ''}>১ বছর</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="badge ${st.cls}">${st.label}</span>
+                        ${daysLeft > 0 ? `<span style="font-size:12px; color:#64748b; margin-left:6px;">(${daysLeft} দিন)</span>` : ''}
+                    </td>
+                    <td>
+                        <button class="btn-save" data-index="${idx}">সংরক্ষণ</button>
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+
+        document.querySelectorAll('.btn-save').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.index);
+                const users = getUsers();
+                const user = users[idx];
+                const select = document.querySelectorAll('.access-select')[idx];
+                const newDays = parseInt(select.value);
+
+                if (!user) return;
+                this.disabled = true;
+                this.textContent = 'সেভিং...';
+
+                user.accessDays = newDays;
+                user.startDate = new Date().toISOString();
+                saveUsers(users);
+
+                // যদি কারেন্ট ইউজার নিজেই হয়, তাহলে সেশন আপডেট
+                const current = getCurrentUser();
+                if (current && current.email === user.email) {
+                    current.accessDays = newDays;
+                    current.startDate = user.startDate;
+                    localStorage.setItem('subha_current_user', JSON.stringify(current));
+                }
+
+                showToast(`${user.email} এর অ্যাক্সেস ${newDays} দিন সেট করা হয়েছে।`);
+                renderAdmin();
+                this.disabled = false;
+                this.textContent = 'সংরক্ষণ';
+            });
+        });
+    }
+
+    // লগআউট
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        clearCurrentUser();
+        window.location.href = 'login.html';
+    });
+
+    // অ্যাডমিন চেক
+    const current = getCurrentUser();
+    if (!current || current.email !== ADMIN_EMAIL) {
+        window.location.href = 'login.html';
+    } else {
+        renderAdmin();
+    }
+</script>
+</body>
+</html>
