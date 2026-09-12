@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page Not Found</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Inter',sans-serif;
+    background:#0b1120;
+    color:#f1f5f9;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+
+  /* ============ LOGIN SCREEN ============ */
+  .admin-login {
+    max-width:420px;
+    width:100%;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:24px;
+    padding:40px 30px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.6);
+    text-align:center;
+  }
+  .admin-login h1 {
+    font-size:22px;
+    font-weight:800;
+    color:#f1f5f9;
+    margin-bottom:6px;
+  }
+  .admin-login p {
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:24px;
+  }
+  .admin-input {
+    width:100%;
+    padding:14px 16px;
+    background:#111c2e;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px;
+    font-size:14px;
+    color:#f1f5f9;
+    margin-bottom:12px;
+    outline:none;
+    font-family:inherit;
+    transition:0.2s;
+  }
+  .admin-input:focus {
+    border-color:#10b981;
+    box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+  }
+  .admin-btn {
+    width:100%;
+    padding:14px;
+    background:#10b981;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:0.2s;
+  }
+  .admin-btn:hover { background:#059669; }
+  .admin-error {
+    color:#ef4444;
+    font-size:13px;
+    margin-top:12px;
+    padding:10px 14px;
+    background:rgba(239,68,68,0.1);
+    border-radius:10px;
+    display:none;
+  }
+  .admin-error.show { display:block; }
+
+  /* ============ ADMIN PANEL ============ */
+  .admin-panel {
+    display:none;
+    width:100%;
+    max-width:1100px;
+    background:#fff;
+    border-radius:28px;
+    padding:30px;
+    color:#0b1e33;
+  }
+  .admin-panel.active { display:block; }
+
+  .panel-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    padding-bottom:18px;
+    border-bottom:1px solid #e9edf2;
+    margin-bottom:22px;
+  }
+  .panel-header h2 {
+    font-size:20px;
+    font-weight:800;
+    color:#0b1e33;
+  }
+  .panel-header h2 i { color:#10b981; }
+
+  .btn-group { display:flex; gap:10px; flex-wrap:wrap; }
+  .btn {
+    padding:8px 18px;
+    border-radius:30px;
+    font-weight:600;
+    font-size:13px;
+    border:none;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:inherit;
+  }
+  .btn-logout { background:#fee2e2; color:#b91c1c; }
+  .btn-refresh { background:#e9edf2; color:#1e293b; }
+
+  .stats-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .stat-card {
+    background:#f8fafc;
+    padding:16px;
+    border-radius:14px;
+    text-align:center;
+  }
+  .stat-card .num {
+    font-size:26px;
+    font-weight:800;
+    color:#0b1e33;
+  }
+  .stat-card .label {
+    font-size:13px;
+    color:#64748b;
+  }
+
+  .toolbar {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .toolbar input {
+    flex:1;
+    min-width:200px;
+    padding:10px 14px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:13px;
+    font-family:inherit;
+    outline:none;
+  }
+  .toolbar input:focus { border-color:#10b981; }
+
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th {
+    background:#f1f5f9;
+    padding:12px 14px;
+    text-align:left;
+    font-weight:600;
+    color:#1e293b;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  td {
+    padding:12px 14px;
+    border-bottom:1px solid #e9edf2;
+    vertical-align:middle;
+  }
+  .access-select {
+    padding:6px 10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    font-size:13px;
+    background:#fff;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-save, .btn-del {
+    border:none;
+    padding:6px 14px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:12px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:0.2s;
+  }
+  .btn-save { background:#10b981; color:#fff; }
+  .btn-save:hover { background:#059669; }
+  .btn-del { background:#fee2e2; color:#b91c1c; margin-left:6px; }
+  .btn-del:hover { background:#fecaca; }
+  .badge {
+    display:inline-block;
+    padding:4px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+  }
+  .badge.active { background:#dcfce7; color:#15803d; }
+  .badge.expired { background:#fee2e2; color:#b91c1c; }
+  .badge.pending { background:#fef9c3; color:#a16207; }
+  .no-users {
+    text-align:center;
+    color:#94a3b8;
+    padding:30px 0;
+  }
+
+  .toast {
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    background:#0b1e33;
+    color:#fff;
+    padding:14px 24px;
+    border-radius:12px;
+    font-size:14px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+    transform:translateY(80px);
+    opacity:0;
+    transition:0.3s;
+    z-index:999;
+  }
+  .toast.show { transform:translateY(0); opacity:1; }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="admin-login" id="loginScreen">
+  <h1><i class="fa-solid fa-lock" style="color:#10b981;"></i></h1>
+  <h1>Restricted Area</h1>
+  <p>Authorized access only</p>
+
+  <input
+    type="email"
+    id="adminEmail"
+    class="admin-input"
+    placeholder="Admin email"
+    autocomplete="off"
+  />
+  <input
+    type="password"
+    id="adminPassword"
+    class="admin-input"
+    placeholder="Password"
+    autocomplete="off"
+  />
+  <button class="admin-btn" id="adminLoginBtn">Login</button>
+  <div class="admin-error" id="adminError"></div>
+</div>
+
+<!-- ============ ADMIN PANEL ============ -->
+<div class="admin-panel" id="panelScreen">
+  <div class="panel-header">
+    <h2><i class="fa-solid fa-user-gear"></i> Admin Panel</h2>
+    <div class="btn-group">
+      <button class="btn btn-refresh" id="refreshBtn">
+        <i class="fa-solid fa-rotate"></i> Refresh
+      </button>
+      <button class="btn btn-logout" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num" id="totalUsers">0</div><div class="label">Total Users</div></div>
+    <div class="stat-card"><div class="num" id="activeUsers">0</div><div class="label">Active</div></div>
+    <div class="stat-card"><div class="num" id="expiredUsers">0</div><div class="label">Expired</div></div>
+    <div class="stat-card"><div class="num" id="pendingUsers">0</div><div class="label">Pending</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="searchUsers" placeholder="🔍 Search by email..." />
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Access</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody">
+        <tr><td colspan="4" class="no-users">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   HIDDEN ADMIN PANEL
+   ============================================================ */
+
+// ---- Credentials ----
+const ADMIN_EMAIL = 'admin@subhamods.com';
+const ADMIN_HASH  = simpleHash('admin123' + 'subha-salt-2024');
+
+// Session key (unique, different from user session)
+const SESSION_KEY = 'x9k2m_session';
+const SESSION_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+/* ---------- Simple hash (obfuscation) ---------- */
+function simpleHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) - h) + str.charCodeAt(i);
+    h |= 0;
+  }
+  return h.toString(16);
+}
+
+/* ---------- Toast ---------- */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ---------- Storage helpers ---------- */
+const getUsers = () => JSON.parse(localStorage.getItem('subha_users') || '[]');
+const saveUsers = u => localStorage.setItem('subha_users', JSON.stringify(u));
+
+/* ---------- Session ---------- */
+function isLoggedIn() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return false;
+    const s = JSON.parse(raw);
+    if (!s.email || !s.expires) return false;
+    if (Date.now() > s.expires) {
+      localStorage.removeItem(SESSION_KEY);
+      return false;
+    }
+    return s.email === ADMIN_EMAIL;
+  } catch (_) {
+    return false;
+  }
+}
+
+function createSession() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({
+    email: ADMIN_EMAIL,
+    expires: Date.now() + SESSION_TTL,
+    created: Date.now()
+  }));
+}
+
+function destroySession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+/* ---------- Login UI ---------- */
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'block';
+  document.getElementById('panelScreen').classList.remove('active');
+  document.getElementById('adminEmail').value = '';
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('adminEmail').focus();
+}
+
+function showPanel() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('panelScreen').classList.add('active');
+  renderPanel();
+}
+
+function showError(msg) {
+  const el = document.getElementById('adminError');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+/* ---------- Login submit ---------- */
+function attemptLogin() {
+  const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+  const pass  = document.getElementById('adminPassword').value;
+
+  if (!email || !pass) {
+    return showError('Email and password required');
+  }
+
+  const passHash = simpleHash(pass + 'subha-salt-2024');
+
+  if (email !== ADMIN_EMAIL || passHash !== ADMIN_HASH) {
+    showError('Invalid credentials');
+    document.getElementById('adminPassword').value = '';
+    return;
+  }
+
+  createSession();
+  showToast('Welcome, admin');
+  setTimeout(showPanel, 300);
+}
+
+/* ---------- User management ---------- */
+function getDaysRemaining(startDate, accessDays) {
+  if (!startDate || !accessDays) return 0;
+  const end = new Date(startDate);
+  end.setDate(end.getDate() + accessDays);
+  return Math.max(0, Math.ceil((end - Date.now()) / 86400000));
+}
+
+function getStatus(u) {
+  if (!u.startDate || !u.accessDays) return { label: 'Pending', cls: 'pending' };
+  const days = getDaysRemaining(u.startDate, u.accessDays);
+  if (days <= 0) return { label: 'Expired', cls: 'expired' };
+  return { label: `Active (${days}d)`, cls: 'active' };
+}
+
+function renderPanel() {
+  const users = getUsers();
+  const search = document.getElementById('searchUsers').value.trim().toLowerCase();
+  const filtered = search
+    ? users.filter(u => u.email.toLowerCase().includes(search))
+    : users;
+
+  let active = 0, expired = 0, pending = 0;
+  users.forEach(u => {
+    const st = getStatus(u);
+    if (st.cls === 'active') active++;
+    else if (st.cls === 'expired') expired++;
+    else pending++;
+  });
+
+  document.getElementById('totalUsers').textContent = users.length;
+  document.getElementById('activeUsers').textContent = active;
+  document.getElementById('expiredUsers').textContent = expired;
+  document.getElementById('pendingUsers').textContent = pending;
+
+  const tbody = document.getElementById('userTableBody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="no-users">
+      ${search ? 'No users match search' : 'No users yet'}
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(u => {
+    const st = getStatus(u);
+    const idx = users.indexOf(u);
+    const daysOpts = [10, 15, 30, 90, 365].map(d =>
+      `<option value="${d}" ${u.accessDays === d ? 'selected' : ''}>${d} days</option>`
+    ).join('');
+    return `
+      <tr>
+        <td><strong>${u.email}</strong></td>
+        <td>
+          <select class="access-select" data-idx="${idx}">
+            <option value="0" ${!u.accessDays ? 'selected' : ''}>None</option>
+            ${daysOpts}
+          </select>
+        </td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td>
+          <button class="btn-save" data-idx="${idx}">Save</button>
+          <button class="btn-del" data-idx="${idx}">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Wire save buttons
+  tbody.querySelectorAll('.btn-save').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const idx = parseInt(this.dataset.idx, 10);
+      const users = getUsers();
+      const user = users[idx];
+      if (!user) return;
+
+      const select = document.querySelector(`.access-select[data-idx="${idx}"]`);
+      const newDays = parseInt(select.value, 10);
+
+      if (user.accessDays !== newDays) {
+        user.accessDays = newDays;
+        user.startDate = newDays > 0 ? new Date().toISOString() : null;
+      }
+      saveUsers(users);
+      showToast(`${user.email} → ${newDays} days`);
+      renderPanel();
+    });
+  });
+
+  // Wire delete buttons
+  tbody.querySelectorAll('.btn-del').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const idx = parseInt(this.dataset.idx, 10);
+      const users = getUsers();
+      const user = users[idx];
+      if (!user) return;
+      if (!confirm(`Delete ${user.email}?`)) return;
+      users.splice(idx, 1);
+      saveUsers(users);
+      showToast('User deleted');
+      renderPanel();
+    });
+  });
+}
+
+/* ---------- Event listeners ---------- */
+document.getElementById('adminLoginBtn').addEventListener('click', attemptLogin);
+
+['adminEmail', 'adminPassword'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptLogin();
+  });
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  destroySession();
+  showLogin();
+  showToast('Logged out');
+});
+
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  renderPanel();
+  showToast('Refreshed');
+});
+
+document.getElementById('searchUsers').addEventListener('input', renderPanel);
+
+/* ---------- Auto-logout after TTL expiry ---------- */
+setInterval(() => {
+  if (document.getElementById('panelScreen').classList.contains('active') && !isLoggedIn()) {
+    destroySession();
+    showLogin();
+  }
+}, 60000);
+
+/* ---------- Boot ---------- */
+if (isLoggedIn()) {
+  showPanel();
+} else {
+  showLogin();
+}
+
+/* ---------- Light right-click deterrent ---------- */
+document.addEventListener('contextmenu', e => {
+  if (!document.getElementById('panelScreen').classList.contains('active')) return;
+  e.preventDefault();
+});
+</script>
+</body>
+</html>
